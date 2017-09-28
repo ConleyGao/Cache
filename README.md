@@ -5,9 +5,9 @@ int whichSet(...)                Conley  almost done
 
 int setIndexLength(...)           Conley Done    test needed
 
-int offsetLength(...)            qiankai         Conley Done  test need
+int offsetLength(...)             Conley Done  test need
 
-int tagBits(...)                 qiankai         Conley Done   tested need
+int tagBits(...)                  Conley Done   tested need
 
 hitWay(...)
 
