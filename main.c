@@ -8,7 +8,7 @@
 //define vars
 //Max File Size
 #define max_str_len             1000
-
+int whichLine (int x)
 char* hexTobinary(char *hexa, char *binarynum){
     int i =0;
     int nbytes = 0;
