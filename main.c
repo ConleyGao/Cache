@@ -124,3 +124,13 @@ int main(int argc, char *argv[]) {
 
     return 0;
 }
+
+int offsetLength(int x){
+    int a = (L>>2);
+    int offset = (x<<(31-a))&(0xff);// int depends on L
+}
+
+
+int tagBits(int x){
+    int tag = (x>>10)& (0x3fffff);
+}
