@@ -1,9 +1,9 @@
 # Cache
 int whichSet(...)                Conley
 
-int setIndexLength(...)
+int setIndexLength(...)         Conley
 
-int offsetLength(...)
+int offsetLength(...)           Conley
 
 int tagBits(...)                 qiankai
 
