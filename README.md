@@ -1,4 +1,8 @@
 # Cache
+Struct line         //Todd in progress
+
+line array         //Todd in progress
+
 int power2 ()                  //  added by conley  number of bits to represent a number 
 
 int whichSet(...)                Conley  almost done
