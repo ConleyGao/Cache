@@ -8,9 +8,8 @@
 //define vars
 //Max File Size
 #define max_str_len             1000
-int whichLine (int x){
-    int d =0;
-}
+
+
 char* hexTobinary(char *hexa, char *binarynum){
     int i =0;
     int nbytes = 0;
@@ -115,10 +114,10 @@ int main(int argc, char *argv[]) {
     }
 
     //scan traces and access cache
-    while(fscanf(file,"%s",&hexa[0])!=EOF){
-        printf("hex : %s\n",hexa);
-        hexTobinary(hexa,binarynum);
-        printf("binary :%s\n",binarynum);
+    while(fscanf(file,"%s",&hexa[0])!=EOF) {
+        printf("hex : %s\n", hexa);
+        hexTobinary(hexa, binarynum);
+        printf("binary :%s\n", binarynum);
     }
 
 
@@ -126,7 +125,7 @@ int main(int argc, char *argv[]) {
 }
 
 int offsetLength(int x){
-    int a = (L>>2);
+    int a = (0>>2); //need L
     int offset = (x<<(31-a))&(0xff);// int depends on L
 }
 
