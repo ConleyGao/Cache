@@ -1,5 +1,6 @@
 # Cache
-int power ()                  //  added by conley  number of bits to represent a number 
+int power2 ()                  //  added by conley  number of bits to represent a number 
+
 int whichSet(...)                Conley  almost done
 
 int setIndexLength(...)           Conley Done    test needed
@@ -14,4 +15,8 @@ updateOnHit(...):
 
 updateOnMiss(...):
 
-Main()                             Conley in progress
+Main()                              in progress
+
+
+1. if you are currenlty working on one , add your name .
+2. if you stopped working on one remove your name and add progress 
