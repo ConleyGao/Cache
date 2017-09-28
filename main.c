@@ -9,6 +9,7 @@
 //Max File Size
 #define max_str_len             1000
 int whichLine (int x){
+    int d = 0;
     return 0;
 }
 char* hexTobinary(char *hexa, char *binarynum){
