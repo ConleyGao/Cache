@@ -1,11 +1,12 @@
 # Cache
-int whichSet(...)                Conley
+int power ()                  //  added by conley  number of bits to represent a number 
+int whichSet(...)                Conley  almost done
 
-int setIndexLength(...)
+int setIndexLength(...)           Conley Done    test needed
 
-int offsetLength(...)            qiankai
+int offsetLength(...)            qiankai         Conley Done  test need
 
-int tagBits(...)                 qiankai
+int tagBits(...)                 qiankai         Conley Done   tested need
 
 hitWay(...)
 
@@ -13,4 +14,4 @@ updateOnHit(...):
 
 updateOnMiss(...):
 
-Main()                              in progress
+Main()                             Conley in progress
