@@ -9,7 +9,7 @@
 //Max File Size
 #define max_str_len             1000
 
-char* hexTobinary(char *hexa, char *binarynum){
+  char* hexTobinary(char *hexa, char *binarynum){
     int i =0;
     int nbytes = 0;
     while(hexa[i]){
@@ -90,20 +90,56 @@ char* hexTobinary(char *hexa, char *binarynum){
     binarynum[nbytes] = '\0';
     return binarynum;
 }
+int power2 (u_int32_t x){
+    unsigned int bits;
+    while(x>0){
+        x=x>>1;
+        bits+=1;
+    }
+    return bits;
+}
+
+int whichSet(u_int32_t x,u_int32_t C,u_int32_t L,u_int32_t K ){
+    u_int32_t  addr=x;
+    addr>>offsetLength(L);
+    int mask =0;
+    for (int i =0, i<setIndexLength(C,L,K),mask
+    while(i<setIndexLength(C,L,K)){
+
+    }
+}
+int offsetLength(u_int32_t L){
+   return power2 (L);
+}
+
+int setIndexLength(u_int32_t C,u_int32_t L,u_int32_t K){
+    u_int32_t nSet = C/L/K;
+    return power2 (nSet);
+}
+int tagBits(u_int32_t x ,u_int32_t C,u_int32_t L,u_int32_t K){
+    u_int32_t  addr=x;
+    addr>> (setIndexLength(C,L,K)+offsetLength(L));
+    return addr;
+}
 
 int main(int argc, char *argv[]) {
     //argv takes [0]main.c [1]K, [2]L,[3]C [4]traceFile
     //int K = int(argv[1]);
     //int L = int(argv[2]);
     //int C = int(argv[3]);
-    //sprintf(argv[4],"C:\\Users\\haoga\\OneDrive\\com.sys\\sampleTrace.txt");
-
-    argv[4]="C:\\Users\\haoga\\OneDrive\\com.sys\\sampleTrace.txt";
+    sprintf(argv[4],"C:\\Users\\haoga\\OneDrive\\com.sys\\sampleTrace.txt");
     char *tracefile = argv[4];
 
-    char hexa [max_str_len];
-    char binarynum[max_str_len];
+    //bit shift
+    int offset  =
 
+
+    //cache structure
+
+    char hexa [max_str_len];
+    //char binarynum[max_str_len];
+
+    //Open file
     FILE *file;
     file = fopen(tracefile,"r");
     printf("%s\n",argv[4]);
