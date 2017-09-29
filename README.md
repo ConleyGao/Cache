@@ -12,10 +12,13 @@ int setIndexLength(...)           Done
 
 int offsetLength(...)          Done  
 
-int tagBits(...)                 Done   
-hitWay(...)                       Kai
+int tagBits(...)                 Done
+   
+hitWay(...)                       Kai Done
 
-updateOnHit(...):                 Kai 
+getLine(...)                      Kai Done
+
+updateOnHit(...):                 Kai Done
 
 updateOnMiss(...):                //Todd, done, not tested
 
@@ -24,8 +27,6 @@ MissLru(...);//Todd, done, not tested
 MissTag(...);//Todd, done, not tested
 
 Main()                              in progress
-
-ArrayPointersetup                 Todd
 
 1. if you are currenlty working on one , add your name .
 2. if you stopped working on one remove your name and add progress 
