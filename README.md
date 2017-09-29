@@ -2,6 +2,7 @@
 Info:
 "Each address is 32 bits long"  -by professor
 
+tagArray[][] lruArray[][]// Todd, Done
 
 int power2 ()                  //  added by conley  number of bits to represent a number 
 
