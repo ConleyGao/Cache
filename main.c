@@ -155,6 +155,7 @@ int getLine(u_int32_t x ,u_int32_t C,u_int32_t L,u_int32_t K){
     int index = setIndexLength(C,L,K);
     int sizeOfSet = sizeof(C*1000/(L*K)-1);
     int line = ((index<<sizeOfSet)>>sizeOfSet);
+    return line;
 }
 
 void updateOnHit(u_int32_t x ,u_int32_t C,u_int32_t L,u_int32_t K){
