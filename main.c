@@ -1,8 +1,8 @@
 
 #include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-#include <string.h>
+//#include <stdlib.h>
+//#include <math.h>
+//#include <string.h>
 
 
 //define vars
@@ -108,6 +108,7 @@ int whichSet(u_int32_t x,u_int32_t C,u_int32_t L,u_int32_t K ){
 
     }
 }
+
 int offsetLength(u_int32_t L){
    return power2 (L);
 }
@@ -116,17 +117,20 @@ int setIndexLength(u_int32_t C,u_int32_t L,u_int32_t K){
     u_int32_t nSet = C/L/K;
     return power2 (nSet);
 }
+
 int tagBits(u_int32_t x ,u_int32_t C,u_int32_t L,u_int32_t K){
     u_int32_t  addr=x;
     addr>> (setIndexLength(C,L,K)+offsetLength(L));
     return addr;
 }
 
+
+
 int main(int argc, char *argv[]) {
-    //argv takes [0]main.c [1]K, [2]L,[3]C [4]traceFile
-    //int K = int(argv[1]);
-    //int L = int(argv[2]);
-    //int C = int(argv[3]);
+    argv takes [0]main.c [1]K, [2]L,[3]C [4]traceFile
+    int K = int(argv[1]);
+    int L = int(argv[2]);
+    int C = int(argv[3]);//shabi, this is KB
     sprintf(argv[4],"C:\\Users\\haoga\\OneDrive\\com.sys\\sampleTrace.txt");
     char *tracefile = argv[4];
 
@@ -135,6 +139,10 @@ int main(int argc, char *argv[]) {
 
 
     //cache structure
+    int set=C*1000/(L*K);//how many set in cash
+    int tagArray[set][K];
+    int lruArray[set][K];
+
 
     char hexa [max_str_len];
     //char binarynum[max_str_len];
