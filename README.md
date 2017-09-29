@@ -18,11 +18,11 @@ hitWay(...)                       Kai
 
 updateOnHit(...):                 Kai 
 
-updateOnMiss(...):                //Todd, in progress
+updateOnMiss(...):                //Todd, done, not tested
 
-MissLru(...);//Todd, in progress
+MissLru(...);//Todd, done, not tested
 
-MissTag(...);//Todd, in progress
+MissTag(...);//Todd, done, not tested
 
 Main()                              in progress
 
