@@ -194,7 +194,7 @@ void MissLru(int set, int line, int manySet, int manyLine){
     for(int j=0; j<manySet; j++){//set# sweep
         for(int i=0; i<manyLine; i++){//line# sweep
             if((j!=set)&&(i!=line)){//lruArray++ if this line not been called
-                lruArray[j][i]++;
+                lruArray[j][i]++; 
             }
         }
     }
