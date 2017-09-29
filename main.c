@@ -90,54 +90,55 @@
     binarynum[nbytes] = '\0';
     return binarynum;
 }
-int power2 (u_int32_t x){
-    unsigned int bits;
-    while(x>0){
-        x=x>>1;
+
+
+int nbits (u_int32_t x){
+    int n = x-1;
+    int bits=0;
+    while(n>0){
+        n=n>>1;
         bits+=1;
     }
     return bits;
 }
 
 int whichSet(u_int32_t x,u_int32_t C,u_int32_t L,u_int32_t K ){
-    u_int32_t  addr=x;
-    addr>>offsetLength(L);
+    int offset =setIndexLength(C,L,K);
+    u_int32_t  addr=x>>offset;
     int mask =0;
-    for (int i =0, i<setIndexLength(C,L,K),mask
-    while(i<setIndexLength(C,L,K)){
-
+    int i = 0;
+    while(i<offset){
+        mask =mask<<1 | 1;
+        i++;
     }
+    printf("%x\n",mask);
+    return  addr & mask;
 }
 int offsetLength(u_int32_t L){
-   return power2 (L);
+    return nbits (L);
 }
 
 int setIndexLength(u_int32_t C,u_int32_t L,u_int32_t K){
     u_int32_t nSet = C/L/K;
-    return power2 (nSet);
+    return nbits (nSet);
 }
 int tagBits(u_int32_t x ,u_int32_t C,u_int32_t L,u_int32_t K){
     u_int32_t  addr=x;
-    addr>> (setIndexLength(C,L,K)+offsetLength(L));
+    addr =addr >> (setIndexLength(C,L,K)+offsetLength(L));
     return addr;
 }
 
 int main(int argc, char *argv[]) {
     //argv takes [0]main.c [1]K, [2]L,[3]C [4]traceFile
-    //int K = int(argv[1]);
+    //int K = int(argv[1]) ;
     //int L = int(argv[2]);
-    //int C = int(argv[3]);
+    //int C = int(argv[3])*1000;
     sprintf(argv[4],"C:\\Users\\haoga\\OneDrive\\com.sys\\sampleTrace.txt");
-    char *tracefile = argv[4];
+    char tracefile [] = argv[4];
 
-    //bit shift
-    int offset  =
-
-
-    //cache structure
-
+    //trace
     char hexa [max_str_len];
-    //char binarynum[max_str_len];
+    u_int32_t decimal ;
 
     //Open file
     FILE *file;
@@ -151,8 +152,8 @@ int main(int argc, char *argv[]) {
     //scan traces and access cache
     while(fscanf(file,"%s",&hexa[0])!=EOF){
         printf("hex : %s\n",hexa);
-        hexTobinary(hexa,binarynum);
-        printf("binary :%s\n",binarynum);
+        u_int32_t decimal =(u_int32_t)strtol(hexa, NULL, 16);
+        printf("decimal : %u\n",decimal);
     }
 
 
