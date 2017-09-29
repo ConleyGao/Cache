@@ -1,8 +1,4 @@
 # Cache
-Struct line         //Todd in progress
-
-line array         //Todd in progress
-
 int power2 ()                  //  added by conley  number of bits to represent a number 
 
 int whichSet(...)                Conley  almost done
@@ -13,14 +9,15 @@ int offsetLength(...)             Conley Done  test need
 
 int tagBits(...)                  Conley Done   tested need
 
-hitWay(...)
+hitWay(...)                       Kai
 
-updateOnHit(...):
+updateOnHit(...):                 Kai 
 
-updateOnMiss(...):
+updateOnMiss(...):                Kai
 
 Main()                              in progress
 
+Arraysetup                        Todd
 
 1. if you are currenlty working on one , add your name .
 2. if you stopped working on one remove your name and add progress 
