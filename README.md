@@ -1,16 +1,27 @@
 # Cache
-int whichSet(...)                Conley
+Info:
+"Each address is 32 bits long"  -by professor
 
-int setIndexLength(...)
 
-int offsetLength(...)            qiankai
+int power2 ()                  //  added by conley  number of bits to represent a number 
 
-int tagBits(...)                 qiankai
+int whichSet(...)                Conley  almost done
 
-hitWay(...)
+int setIndexLength(...)           Conley Done    test needed
 
-updateOnHit(...):
+int offsetLength(...)             Conley Done  test need
 
-updateOnMiss(...):
+int tagBits(...)                  Conley Done   tested need
+
+hitWay(...)                       Kai
+
+updateOnHit(...):                 Kai 
+
+updateOnMiss(...):                Kai
 
 Main()                              in progress
+
+Arraysetup                        Todd
+
+1. if you are currenlty working on one , add your name .
+2. if you stopped working on one remove your name and add progress 
