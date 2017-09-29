@@ -10,8 +10,6 @@
 #define max_str_len             1000
 int **tagArray;
 int **lruArray;
-int manySet;//how many set
-int manyLine;//how many line
 
 
   char* hexTobinary(char *hexa, char *binarynum){
@@ -129,34 +127,14 @@ int tagBits(u_int32_t x ,u_int32_t C,u_int32_t L,u_int32_t K){
     return addr;
 }
 
-int setaddress(u_int32_t x ,u_int32_t C,u_int32_t L,u_int32_t K){
-    int lineNum = x<<(31-offsetLength(L)-setIndexLength(C,L,K));//get rid of tag
-    lineNum = lineNum >> (31-offsetLength(L));//shifting set address to the right
-    int a=0x0111111>>(30-offsetLength(L));
-    lineNum=lineNum&a;//get rid of 2s complement
-    return lineNum;
-}
-
-void updateOnMiss(u_int32_t tag, u_int32_t x, u_int32_t C,u_int32_t L,u_int32_t K ){//tag, address, C, L, K
-    int setNum = whichSet();//waiting for whichset()
-    //get set address
-    int line=setaddress(x,C,L,K)-L*setNum+1;//getting which line, L start with 1
-    MissTag(setNum,line, tag);//updatedata
-    MissLru(setNum,line,manySet,manyLine);//updatedata
+void updateOnMiss(u_int32_t tag, u_int32_t x, u_int32_t C,u_int32_t L,u_int32_t K ){
+    int setNum= whichSet();//waiting for whichset()
 
 }
-void MissLru(int set, int line, int manySet, int manyLine){
-    for(int j=0; j<manySet; j++){//set# sweep
-        for(int i=0; i<manyLine; i++){//line# sweep
-            if((j!=set)&&(i!=line)){//lruArray++ if this line not been called
-                lruArray[j][i]++;
-            }
-        }
-    }
-}
+void MissLru(){}
 
-void MissTag(int set, int line, int tag){
-    tagArray[set][line]=tag;
+void MissTag(int set, int line){
+
 }
 int main(int argc, char *argv[]) {
     argv takes [0]main.c [1]K, [2]L,[3]C [4]traceFile
@@ -172,8 +150,6 @@ int main(int argc, char *argv[]) {
 
     //cache structure
     int set=C*1000/(L*K)-1;//how many set in cash
-    manySet=set;
-    manyLine=K;
     tagArray=(int**)malloc((set+1)*max_str_len);//[set][line]
     for(int j=0;j<set+1;j++){
         *(tagArray+j)=(int*)malloc(K*sizeof(int));//each set has K line
