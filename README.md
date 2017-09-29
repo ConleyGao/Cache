@@ -6,13 +6,13 @@ tagArray[][] lruArray[][]// Todd, Done,[set][line]
 
 int power2 ()                  //  added by conley  number of bits to represent a number 
 
-int whichSet(...)                Conley  almost done
+int whichSet(...)                Conley  almost tested
 
-int setIndexLength(...)           Conley Done    test needed
+int setIndexLength(...)           Conley Done    tested
 
-int offsetLength(...)             Conley Done  test need
+int offsetLength(...)             Conley Done  tested
 
-int tagBits(...)                  Conley Done   tested need
+int tagBits(...)                  Conley Done   tested
 
 hitWay(...)                       Kai
 
@@ -24,7 +24,7 @@ MissLru(...);//Todd, done, not tested
 
 MissTag(...);//Todd, done, not tested
 
-Main()                              in progress
+Main()                              in progress , modified
 
 ArrayPointersetup                 Todd
 
