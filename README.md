@@ -21,7 +21,7 @@ updateOnMiss(...):                Kai
 
 Main()                              in progress
 
-Arraysetup                        Todd
+ArrayPointersetup                 Todd
 
 1. if you are currenlty working on one , add your name .
 2. if you stopped working on one remove your name and add progress 
