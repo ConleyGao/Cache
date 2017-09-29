@@ -9,7 +9,7 @@
 //Max File Size
 #define max_str_len             1000
 
-  char* hexTobinary(char *hexa, char *binarynum){
+  /*char* hexTobinary(char *hexa, char *binarynum){
     int i =0;
     int nbytes = 0;
     while(hexa[i]){
@@ -90,7 +90,7 @@
     binarynum[nbytes] = '\0';
     return binarynum;
 }
-
+*/
 
 int nbits (u_int32_t x){
     int n = x-1;
@@ -129,21 +129,22 @@ int tagBits(u_int32_t x ,u_int32_t C,u_int32_t L,u_int32_t K){
 }
 
 int main(int argc, char *argv[]) {
+    printf("te");
     //argv takes [0]main.c [1]K, [2]L,[3]C [4]traceFile
     //int K = int(argv[1]) ;
     //int L = int(argv[2]);
     //int C = int(argv[3])*1000;
-    sprintf(argv[4],"C:\\Users\\haoga\\OneDrive\\com.sys\\sampleTrace.txt");
-    char tracefile [] = argv[4];
+  //  sprintf(argv[4],"D:\\Downloads\\sampleTrace.txt");
+   // char tracefile [] = argv[4];
 
     //trace
     char hexa [max_str_len];
     u_int32_t decimal ;
-
+    printf("test");
     //Open file
     FILE *file;
-    file = fopen(tracefile,"r");
-    printf("%s\n",argv[4]);
+    file = fopen("C:\\Users\\haoga\\CLionProjects\\Cache\\sampleTrace.txt","r");
+
     if (file == NULL){
         printf("unable to open the file");
         exit(0);
@@ -152,8 +153,9 @@ int main(int argc, char *argv[]) {
     //scan traces and access cache
     while(fscanf(file,"%s",&hexa[0])!=EOF){
         printf("hex : %s\n",hexa);
-        u_int32_t decimal =(u_int32_t)strtol(hexa, NULL, 16);
-        printf("decimal : %u\n",decimal);
+        decimal =(u_int32_t)strtol(hexa, NULL, 16);
+        printf("decimal : %u\n",decimal)
+                
     }
 
 
