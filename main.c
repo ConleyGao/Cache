@@ -160,8 +160,8 @@ int getLine(u_int32_t x ,u_int32_t C,u_int32_t L,u_int32_t K){
 void updateOnHit(u_int32_t x ,u_int32_t C,u_int32_t L,u_int32_t K){
     int s = whichSet(x,C,L,K);
     int l = getLine(x,C,L,K);
-    lruArray[s][l]= 0;
-    for(int set = 0; set<C*1000/(L*K)-1; set++){
+    lruArray[s][l]= 0;//reset the lru value
+    for(int set = 0; set<C*1000/(L*K)-1; set++){//others in the cache lru value ++
         for(int line = 0;line< K; line ++){
             if(set!=s&&line!=l){
                 lruArray[set][line]++;
