@@ -141,24 +141,25 @@ int tagBits(u_int32_t x ,u_int32_t C,u_int32_t L,u_int32_t K){
     return addr;
 }
 
-int hitway(u_int32_t x ,u_int32_t C,u_int32_t L,u_int32_t K){
-    int hit = -1;
-    int tag = tagBits(x,C,L,K);
-    if(tag == tagArray[whichSet(x,C,L,K)][getLine(x,C,L,K)]){
-        hit = 1;
-    }
-    return hit;
-}
-int getLine(u_int32_t x ,u_int32_t C,u_int32_t L,u_int32_t K){
+int getLine(u_int32_t C,u_int32_t L,u_int32_t K){
     int index = setIndexLength(C,L,K);
     int sizeOfSet = sizeof(C*1000/(L*K)-1);
     int line = ((index<<sizeOfSet)>>sizeOfSet);
     return line;
 }
 
+int hitway(u_int32_t x ,u_int32_t C,u_int32_t L,u_int32_t K){
+    int hit = -1;
+    int tag = tagBits(x,C,L,K);
+    if(tag == tagArray[whichSet(x,C,L,K)][getLine(C,L,K)]){
+        hit = 1;
+    }
+    return hit;
+}
+
 void updateOnHit(u_int32_t x ,u_int32_t C,u_int32_t L,u_int32_t K){
     int s = whichSet(x,C,L,K);
-    int l = getLine(x,C,L,K);
+    int l = getLine(C,L,K);
     lruArray[s][l]= 0;//reset the lru value
     for(int set = 0; set<C*1000/(L*K)-1; set++){//others in the cache lru value ++
         for(int line = 0;line< K; line ++){
@@ -183,58 +184,58 @@ int setaddress(u_int32_t x ,u_int32_t C,u_int32_t L,u_int32_t K){
 }
 */
 
-void updateOnMiss(u_int32_t tag, u_int32_t x, u_int32_t C,u_int32_t L,u_int32_t K ){//tag, address, C, L, K
-    missCount++;//counting
-    int setNum = whichSet(x,C,L,K);//waiting for whichset()
-    //get set address
-    //int line=setaddress(x,C,L,K)-L*setNum+1;//getting which line, L start with 1
-    int line =  MissTag(setNum, tag, K);//updatedata
-    MissLru(setNum,line, manySet,manyLine);//updatedata
+    void updateOnMiss(u_int32_t tag, u_int32_t x, u_int32_t C,u_int32_t L,u_int32_t K ){//tag, address, C, L, K
+        missCount++;//counting
+        int setNum = whichSet(x,C,L,K);//waiting for whichset()
+        //get set address
+        //int line=setaddress(x,C,L,K)-L*setNum+1;//getting which line, L start with 1
+        int line =  MissTag(setNum, tag, K);//updatedata
+        MissLru(setNum,line, manySet,manyLine);//updatedata
 
-    //debug
-    printf("address %d, tag %d, in array %d line:%d\n", x, tag, setNum,line);
-    printf("[0][0]: %d\n", lruArray[0][0]);
+        //debug
+        printf("address %d, tag %d, in array %d line:%d\n", x, tag, setNum,line);
+        printf("[0][0]: %d\n", lruArray[0][0]);
 
-}
+    }
 
-void MissLru(int set, int line, int manySet, int manyLine){
-    for(int j=0; j<manySet; j++){//set# sweep
-        for(int i=0; i<manyLine; i++){//line# sweep
-            if((j!=set)&&(i!=line)){//lruArray++ if this line not been called
-                lruArray[j][i]++; 
+    void MissLru(int set, int line, int manySet, int manyLine){
+        for(int j=0; j<manySet; j++){//set# sweep
+            for(int i=0; i<manyLine; i++){//line# sweep
+                if((j!=set)&&(i!=line)){//lruArray++ if this line not been called
+                    lruArray[j][i]++;
+                }
             }
         }
     }
-}
 
 
-int MissTag(int set, int tag, int K){//pushing tag into tag array and return which line it pushed into
-    int r=0;//return which line it took in
-    int temp=0;//for testing
-    int lru=0;//lru comparing
-    int a=0;//storing biggest lru of j
-    int check=0;
-    for(int j=0;j<K;j++){
-        temp=tagArray[set][j];
-        if(!temp){//if empty
-            tagArray[set][j]=tag;
-            lruArray[set][j]=0;
-            r=j;
-            check=!check;
-        } else{
-            if(lru<lruArray[set][j]) {
-                a=j;
-                lru = lruArray[set][j];
+    int MissTag(int set, int tag, int K){//pushing tag into tag array and return which line it pushed into
+        int r=0;//return which line it took in
+        int temp=0;//for testing
+        int lru=0;//lru comparing
+        int a=0;//storing biggest lru of j
+        int check=0;
+        for(int j=0;j<K;j++){
+            temp=tagArray[set][j];
+            if(!temp){//if empty
+                tagArray[set][j]=tag;
+                lruArray[set][j]=0;
+                r=j;
+                check=!check;
+            } else{
+                if(lru<lruArray[set][j]) {
+                    a=j;
+                    lru = lruArray[set][j];
+                }
             }
         }
+        if(!check){
+            tagArray[set][a]=tag;
+            lruArray[set][a]=0;
+            r=a;
+        }
+        return r;
     }
-    if(!check){
-        tagArray[set][a]=tag;
-        lruArray[set][a]=0;
-        r=a;
-    }
-    return r;
-}
 
 int main(int argc, char *argv[]) {
     //argv takes [0]main.c [1]K, [2]L,[3]C [4]traceFile
@@ -248,7 +249,6 @@ int main(int argc, char *argv[]) {
     int C=1*1024;
 */
     //char *tracefile = argv[4];
-
 
     //bit shift
     int offset  =nbits(L);
