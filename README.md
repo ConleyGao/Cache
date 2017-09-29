@@ -1,4 +1,8 @@
 # Cache
+Info:
+"Each address is 32 bits long"  -by professor
+
+
 int power2 ()                  //  added by conley  number of bits to represent a number 
 
 int whichSet(...)                Conley  almost done
