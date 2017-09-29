@@ -2,7 +2,7 @@
 Info:
 "Each address is 32 bits long"  -by professor
 
-tagArray[][] lruArray[][]// Todd, Done
+tagArray[][] lruArray[][]// Todd, Done,[set][line]
 
 int power2 ()                  //  added by conley  number of bits to represent a number 
 
@@ -18,7 +18,11 @@ hitWay(...)                       Kai
 
 updateOnHit(...):                 Kai 
 
-updateOnMiss(...):                Kai
+updateOnMiss(...):                //Todd, in progress
+
+MissLru(...);//Todd, in progress
+
+MissTag(...);//Todd, in progress
 
 Main()                              in progress
 

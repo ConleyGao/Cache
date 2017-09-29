@@ -1,13 +1,16 @@
 
 #include <stdio.h>
-//#include <stdlib.h>
-//#include <math.h>
-//#include <string.h>
+#include <stdlib.h>
+#include <math.h>
+#include <string.h>
 
 
 //define vars
 //Max File Size
 #define max_str_len             1000
+int **tagArray;
+int **lruArray;
+
 
   char* hexTobinary(char *hexa, char *binarynum){
     int i =0;
@@ -124,8 +127,15 @@ int tagBits(u_int32_t x ,u_int32_t C,u_int32_t L,u_int32_t K){
     return addr;
 }
 
+void updateOnMiss(u_int32_t tag, u_int32_t x, u_int32_t C,u_int32_t L,u_int32_t K ){
+    int setNum= whichSet();//waiting for whichset()
 
+}
+void MissLru(){}
 
+void MissTag(int set, int line){
+
+}
 int main(int argc, char *argv[]) {
     argv takes [0]main.c [1]K, [2]L,[3]C [4]traceFile
     int K = int(argv[1]);
@@ -135,14 +145,20 @@ int main(int argc, char *argv[]) {
     char *tracefile = argv[4];
 
     //bit shift
-    int offset  =
+    int offset  =;
 
 
     //cache structure
-    int set=C*1000/(L*K);//how many set in cash
-    int tagArray[set][K];
-    int lruArray[set][K];
+    int set=C*1000/(L*K)-1;//how many set in cash
+    tagArray=(int**)malloc((set+1)*max_str_len);//[set][line]
+    for(int j=0;j<set+1;j++){
+        *(tagArray+j)=(int*)malloc(K*sizeof(int));//each set has K line
+    }
 
+    lruArray=int**)malloc((set+1)*max_str_len);//[set][line]
+    for(int j=0;j<set+1;j++){
+        *(lruArray+j)=(int*)malloc(K*sizeof(int));//each set has K line
+    }
 
     char hexa [max_str_len];
     //char binarynum[max_str_len];
