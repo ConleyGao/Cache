@@ -8,14 +8,14 @@
 //define vars
 //Max File Size
 #define max_str_len             1000
-<<<<<<< HEAD
+
 int **tagArray;
 int **lruArray;
 int manySet;//how many set
 int manyLine;//how many line
 
-=======
->>>>>>> origin/master
+
+
 
   char* hexTobinary(char *hexa, char *binarynum){
     int i =0;
@@ -136,7 +136,7 @@ int tagBits(u_int32_t x ,u_int32_t C,u_int32_t L,u_int32_t K){
     return addr;
 }
 
-<<<<<<< HEAD
+
 int setaddress(u_int32_t x ,u_int32_t C,u_int32_t L,u_int32_t K){
     int lineNum = x<<(31-offsetLength(L)-setIndexLength(C,L,K));//get rid of tag
     lineNum = lineNum >> (31-offsetLength(L));//shifting set address to the right
@@ -166,15 +166,14 @@ void MissLru(int set, int line, int manySet, int manyLine){
 void MissTag(int set, int line, int tag){
     tagArray[set][line]=tag;
 }
-=======
->>>>>>> origin/master
+
 int main(int argc, char *argv[]) {
     //argv takes [0]main.c [1]K, [2]L,[3]C [4]traceFile
     //int K = int(argv[1]) ;
     //int L = int(argv[2]);
     //int C = int(argv[3])*1000;
     sprintf(argv[4],"C:\\Users\\haoga\\OneDrive\\com.sys\\sampleTrace.txt");
-<<<<<<< HEAD
+
     char *tracefile = argv[4];
 
     //bit shift
@@ -194,9 +193,9 @@ int main(int argc, char *argv[]) {
     for(int j=0;j<set+1;j++){
         *(lruArray+j)=(int*)malloc(K*sizeof(int));//each set has K line
     }
-=======
+
     char tracefile [] = argv[4];
->>>>>>> origin/master
+
 
     //trace
     char hexa [max_str_len];
