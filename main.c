@@ -126,9 +126,9 @@ int setaddress(u_int32_t x ,u_int32_t C,u_int32_t L,u_int32_t K){
 
 int main(int argc, char *argv[]) {
     //argv takes [0]main.c [1]K, [2]L,[3]C [4]traceFile
-    int K = (int)argv[1] ;//line per set
-    int L = (int)argv[2];//line size
-    int C = (int)argv[3]*1024;//cache size in Byte, KB=1025 bytes
+    u_int32_t K = argv[1] ;//line per set
+    u_int32_t L = (int)argv[2];//line size
+    u_int32_t C = (int)argv[3]*1024;//cache size in Byte, KB=1025 bytes
 
 
 
@@ -175,17 +175,17 @@ int main(int argc, char *argv[]) {
         //show data
         //printf("hex : %s\n", hexa);
         //convert Hex string to int
-        u_int32_t decimal = (u_int32_t) strtol(hexa, NULL, 16);
+        decimal = (u_int32_t) strtol(hexa, NULL, 16);
 
         //printf("decimal : %u\n", decimal);
 
 
         //whichSet
-        int wSet = whichSet(decimal, C, L, K);
+        u_int32_t wSet = whichSet(decimal, C, L, K);
         //tagBits
-        int tBits = tagBits(decimal, C, L, K);
+        u_int32_t tBits = tagBits(decimal, C, L, K);
         //hit ?
-        int hit = hitway(tBits,wSet,K);
+        u_int32_t hit = hitway(tBits,wSet,K);
 
         // updates
           if (hit == -1){
