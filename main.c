@@ -54,9 +54,9 @@ int whichSet(u_int32_t x,u_int32_t C,u_int32_t L,u_int32_t K ){
 
 
 int tagBits(u_int32_t x ,u_int32_t C,u_int32_t L,u_int32_t K){
-    u_int32_t  addr=x;
-    addr =addr >> (setIndexLength(C,L,K)+offsetLength(L));  //tag = address logical shift right (set bits+offset bits)
-    return addr;  // return tag as unsigned integer for easy comparsion
+    u_int32_t  address=x;
+    address =address >> (setIndexLength(C,L,K)+offsetLength(L));  //tag = address logical shift right (set bits+offset bits)
+    return address;  // return tag as unsigned integer for easy comparsion
 }
 
 
@@ -94,7 +94,7 @@ int hitway(u_int32_t tag,u_int32_t set,u_int32_t K) {
     }
 
     void updateOnMiss(u_int32_t tag, u_int32_t set, u_int32_t K) {//tag, address, K
-        int i = 0, max = 0, index = 0;//i for loop, max for max lru, index is o/p line #
+        int i = 0, maxlru = 0, lineindex = 0;//i for loop, max for max lru, index is o/p line #
         increLRU(set, K);//update lru first, won't be affected by tag update
         while (i < K) {
             if (lruArray[set][i] == -1) {//if empty line
@@ -102,15 +102,15 @@ int hitway(u_int32_t tag,u_int32_t set,u_int32_t K) {
                 lruArray[set][i] = 0;    //set lru to 0
                 return;                  //exit function
             }
-            else if (max < lruArray[set][i]) {//find max lru line
-                max = lruArray[set][i];
-                index = i;
+            else if (maxlru < lruArray[set][i]) {//find max lru line
+                maxlru = lruArray[set][i];
+                lineindex = i;
             }
             i++;
         }
         //update
-        tagArray[set][index] = tag;
-        lruArray[set][index] = 0;
+        tagArray[set][lineindex] = tag;
+        lruArray[set][lineindex] = 0;
     }
 
     int main(int argc, char *argv[]) {
@@ -119,7 +119,7 @@ int hitway(u_int32_t tag,u_int32_t set,u_int32_t K) {
         u_int32_t L = (u_int32_t) strtol(argv[2],NULL,10);//line size
         u_int32_t C = (u_int32_t) (strtol((argv[3]),NULL,10))*1024;//cache size in Byte, KB=1025 bytes
 
-        printf("Trace=%s, K=%d, L=%d, C=%d, ", argv[4], K, L, C);//printing needed stuff
+        printf("FilePath=%s, K=%d, L=%d, C=%d, ", argv[4], K, L, C);//printing needed stuff
 
         //vars
         char hexa[max_str_len];
@@ -165,13 +165,13 @@ int hitway(u_int32_t tag,u_int32_t set,u_int32_t K) {
             //whichSet
             u_int32_t wSet = (u_int32_t) whichSet(decimal, C, L, K);
             //tagBits
-            u_int32_t tBits = (u_int32_t) tagBits(decimal, C, L, K);
+            u_int32_t tag = (u_int32_t) tagBits(decimal, C, L, K);
             //hit ?
-            u_int32_t hit = (u_int32_t) hitway(tBits, wSet, K);
+            u_int32_t hit = (u_int32_t) hitway(tag, wSet, K);
 
             // updates
             if (hit == -1) {
-                updateOnMiss(tBits, wSet, K);
+                updateOnMiss(tag, wSet, K);
             } else {
                 updateOnHit(wSet, hit, K);
             }
