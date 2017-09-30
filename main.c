@@ -14,7 +14,7 @@ int **lruArray;
 //int manySet;//how many set
 //int manyLine;//how many line
 int n_hit = 0;//hit count
-int n_miss = 0;//miss count
+int n_access = 0;//access count
 
 int nbits (u_int32_t x){//log2()
     int n = x-1;
@@ -55,34 +55,24 @@ int tagBits(u_int32_t x ,u_int32_t C,u_int32_t L,u_int32_t K){
     return addr;
 }
 
-// TODO  this should not be need , same as hitway()
-int getLine(u_int32_t C,u_int32_t L,u_int32_t K){
-    int index = setIndexLength(C,L,K);
-    int sizeOfSet = sizeof(C*1000/(L*K)-1);
-    int line = ((index<<sizeOfSet)>>sizeOfSet);
-    return line;
-}
 
 //TODO   return -1 if no tag match, return which line if hit
 //   if hit return  which line hit
 //   else return -1
-int hitway(u_int32_t tag,u_int32_t set,u_int32_t K) {
-
-    for (int i = 0; i < K; i++) {
-        if (lruArray[set][i] >= 0) {
+u_int32_t hitway(u_int32_t tag,u_int32_t set,u_int32_t K) {
+    n_access++;//counting access time _
+    u_int32_t result=(u_int32_t )-1;//return value
+    for (u_int32_t i = 0; i < K; i++) {
+        if (lruArray[set][i] >= 0) {//If LRU value is -1, the block is empty, no need to compare
             if (tagArray[set][i] == tag) {
-                n_hit = n_hit + 1;
-                return i;
-            }
-            if ((tagArray[set][i] == tag) && (lruArray[set][i] != -1)) {
-                n_hit = n_hit + 1;
-                return i;
+                n_hit = n_hit + 1;//update hit value to calculate hit rate
+                result=i;
             }
         }
-        n_miss = n_miss + 1;
-        return -1;
-    }
 }
+    return result;
+}
+//updating lru array if not empty, for both hit and miss
     void increLRU(u_int32_t set, u_int32_t K) {
         for (int j = 0; j < K; j++) {
             if ((lruArray[set][j]) != -1);
@@ -90,16 +80,16 @@ int hitway(u_int32_t tag,u_int32_t set,u_int32_t K) {
         }
     }
 // TODO  only need to update lruarray
-    void updateOnHit(u_int32_t set, u_int32_t line, u_int32_t K) {
-        increLRU(set, K);
-        lruArray[set][line] = 0;
+    void updateOnHit(u_int32_t set, u_int32_t line, u_int32_t K) {//if it's a hit, update the LRU value
+        increLRU(set, K);//all LRU value add one
+        lruArray[set][line] = 0;// set the LRUvalue of the hit line to 0
 
     }
 
 // TODO  swich index that has highest LRU  with new addrs update tag and set it's LRU =0
     void updateOnMiss(u_int32_t tag, u_int32_t set, u_int32_t K) {//tag, address, K
         int i = 0, max = 0, index = 0;//i for loop, max for max lru, index is o/p line #
-        increLRU(set, K);
+        increLRU(set, K);//update lru first, won't be affected by tag update
         while (i < K) {
             if (lruArray[set][i] == -1) {//if empty
                 tagArray[set][i] = tag;
@@ -123,12 +113,6 @@ int hitway(u_int32_t tag,u_int32_t set,u_int32_t K) {
         u_int32_t C = (u_int32_t) argv[3] * 1024;//cache size in Byte, KB=1025 bytes
 
         printf("Trace=%s, K=%d, L=%d, C=%d, ", argv[4], K, L, C);//printing needed stuff
-
-        /*  for test
-         int K=4;
-         int L=1;
-         int C=1*1024;
-     */
 
         //vars
         char hexa[max_str_len];
@@ -186,7 +170,7 @@ int hitway(u_int32_t tag,u_int32_t set,u_int32_t K) {
             }
 
         }
-        double missrate = n_miss / (n_miss + n_hit);// miss rate = miss/access
+        double missrate = 1-(n_hit/n_access);// miss rate = miss/access
         printf("miss rate = %f\n", missrate);
 
         //free memory
