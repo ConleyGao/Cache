@@ -13,8 +13,8 @@ unsigned int **tagArray;
 int **lruArray;
 //int manySet;//how many set
 //int manyLine;//how many line
-int n_hit = 0;//hit count
-int n_access = 0;//access count
+double n_hit = 0;//hit count
+double n_access = 0;//access count
 
 
 //find # of bits needed to show index number
@@ -66,6 +66,7 @@ int tagBits(u_int32_t x ,u_int32_t C,u_int32_t L,u_int32_t K){
 
 int hitway(u_int32_t tag,u_int32_t set,u_int32_t K) {
     int i =0;
+    n_access++;
 
     for (i = 0; i < K; i++) {
             if ((tagArray[set][i] == tag) && (lruArray[set][i] >=0)) { // if tags are equal and not invalid
@@ -114,9 +115,9 @@ int hitway(u_int32_t tag,u_int32_t set,u_int32_t K) {
 
     int main(int argc, char *argv[]) {
         //argv takes [0]main.c [1]K, [2]L,[3]C [4]traceFile
-        u_int32_t K = (u_int32_t) strtol(argv[1],NULL,10);//line per set
-        u_int32_t L = (u_int32_t) strtol(argv[2],NULL,10);//line size
-        u_int32_t C = (u_int32_t) (strtol((argv[3]),NULL,10))*1024;//cache size in Byte, KB=1025 bytes
+        u_int32_t K = 8;//line per set
+        u_int32_t L = 16;//line size
+        u_int32_t C = 512;//cache size in Byte, KB=1025 bytes
 
         printf("Trace=%s, K=%d, L=%d, C=%d, ", argv[4], K, L, C);//printing needed stuff
 
