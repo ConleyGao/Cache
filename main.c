@@ -103,7 +103,7 @@ int setaddress(u_int32_t x ,u_int32_t C,u_int32_t L,u_int32_t K){
     return lineNum;
 }
 */
->>>>>>> Stashed changes
+
 // TODO  swich index that has highest LRU  with new addrs update tag and set it's LRU =0
     void updateOnMiss(u_int32_t tag, u_int32_t set,u_int32_t K ){//tag, address, K
         int i=0 , max=0, index=0;
