@@ -68,8 +68,9 @@ int hitway(u_int32_t x ,u_int32_t C,u_int32_t L,u_int32_t K){
 
     int hit = -1;
     int tag = tagBits(x,C,L,K);
-    if(tag == tagArray[whichSet(x,C,L,K)][getLine(C,L,K)]){
-        hit = 1;
+    int line = getLine(C,L,K);
+    if(tag == tagArray[whichSet(x,C,L,K)][line]){
+        hit = line;
     }
     return hit;
 }
