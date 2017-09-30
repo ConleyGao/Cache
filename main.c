@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
+
 #include <string.h>
 
 
@@ -13,8 +13,8 @@ unsigned int **tagArray;
 int **lruArray;
 //int manySet;//how many set
 //int manyLine;//how many line
-int n_hit = 0;
-int n_miss = 0;
+int n_hit = 0;//hit count
+int n_miss = 0;//miss count
 
 int nbits (u_int32_t x){//log2()
     int n = x-1;
@@ -41,12 +41,12 @@ int whichSet(u_int32_t x,u_int32_t C,u_int32_t L,u_int32_t K ){
 }
 
 int offsetLength(u_int32_t L){
-    return nbits (L);
+    return nbits(L);
 }
 
 int setIndexLength(u_int32_t C,u_int32_t L,u_int32_t K){
     u_int32_t nSet = C/L/K;
-    return nbits (nSet);
+    return nbits(nSet);
 }
 int tagBits(u_int32_t x ,u_int32_t C,u_int32_t L,u_int32_t K){
     u_int32_t  addr=x;
@@ -68,7 +68,7 @@ int getLine(u_int32_t C,u_int32_t L,u_int32_t K){
 int hitway(u_int32_t tag,u_int32_t set,u_int32_t K){
 
     for (int i=0;i<K;i++ ){
-        if(tagArray[set][i]==tag) {
+        if((tagArray[set][i]==tag)&&(lruArray[set][i]!=-1)) {
             n_hit=n_hit+1;
             return i;
         }
@@ -91,30 +91,32 @@ void updateOnHit(u_int32_t set ,u_int32_t line,u_int32_t K){
 
 // TODO  swich index that has highest LRU  with new addrs update tag and set it's LRU =0
     void updateOnMiss(u_int32_t tag, u_int32_t set,u_int32_t K ){//tag, address, K
-        int i=0 , max=0, index=0;
+        int i=0 , max=0, index=0;//i for loop, max for max lru, index is o/p line #
         increLRU(set,K);
         while(i<K){
-            if (lruArray[set][i]==-1){
+            if (lruArray[set][i]==-1){//if empty
                 tagArray[set][i] =tag;
                 lruArray[set][i] =0;
                 return;
             }
-          else if (max<lruArray[set][i] ){
+          else if (max<lruArray[set][i] ){//find max lru
                max = lruArray[set][i];
                index = i;
            }
+            i++;
         }
+    //update
         tagArray[set][index] =tag;
         lruArray[set][index] =0;
     }
 
 int main(int argc, char *argv[]) {
     //argv takes [0]main.c [1]K, [2]L,[3]C [4]traceFile
-    int K = (int)argv[1] ;//line per set
-    int L = (int)argv[2];//line size
-    int C = (int)argv[3]*1024;//cache size in Byte, KB=1025 bytes
+    u_int32_t K = (u_int32_t )argv[1] ;//line per set
+    u_int32_t L = (u_int32_t )argv[2];//line size
+    u_int32_t C = (u_int32_t )argv[3]*1024;//cache size in Byte, KB=1025 bytes
 
-
+    printf("Trace=%s, K=%d, L=%d, C=%d, ",argv[4], K,L,C);//printing needed stuff
 
    /*  for test
     int K=4;
@@ -124,10 +126,9 @@ int main(int argc, char *argv[]) {
 
     //vars
     char hexa [max_str_len];
-    u_int32_t decimal ;
     int i,j;
 
-    //cache structure
+    //initializing cache structure
     int n_set=C/(L*K);//how many set in cash
 
     tagArray=(unsigned int**)malloc((n_set)*sizeof(unsigned int *));//[set][line]
@@ -148,7 +149,7 @@ int main(int argc, char *argv[]) {
 
 
     //Open file
-    FILE *file = fopen("sample.txt","r");//Todd's test
+    FILE *file = fopen(argv[4],"r");//Todd's test
    // printf("%s\n",argv[4]);
     if (file == NULL){
         printf("unable to open the file");
@@ -168,11 +169,11 @@ int main(int argc, char *argv[]) {
 
 
         //whichSet
-        int wSet = whichSet(decimal, C, L, K);
+        u_int32_t wSet = (u_int32_t)whichSet(decimal, C, L, K);
         //tagBits
-        int tBits = tagBits(decimal, C, L, K);
+        u_int32_t tBits = (u_int32_t )tagBits(decimal, C, L, K);
         //hit ?
-        int hit = hitway(tBits,wSet,K);
+        u_int32_t hit = (u_int32_t )hitway(tBits,wSet,K);
 
         // updates
           if (hit == -1){
