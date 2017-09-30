@@ -14,7 +14,7 @@ int **lruArray;
 //int manySet;//how many set
 //int manyLine;//how many line
 int n_hit = 0;//hit count
-int n_miss = 0;//miss count
+int n_access = 0;//access count
 
 int nbits (u_int32_t x){//log2()
     int n = x-1;
@@ -55,35 +55,24 @@ int tagBits(u_int32_t x ,u_int32_t C,u_int32_t L,u_int32_t K){
     return addr;
 }
 
-// TODO  this should not be need , same as hitway()
-int getLine(u_int32_t C,u_int32_t L,u_int32_t K){
-    int index = setIndexLength(C,L,K);
-    int sizeOfSet = sizeof(C*1000/(L*K)-1);
-    int line = ((index<<sizeOfSet)>>sizeOfSet);
-    return line;
-}
 
 //TODO   return -1 if no tag match, return which line if hit
 //   if hit return  which line hit
 //   else return -1
 u_int32_t hitway(u_int32_t tag,u_int32_t set,u_int32_t K) {
-
+    n_access++;//counting access time _
+    u_int32_t result=(u_int32_t )-1;//return value
     for (u_int32_t i = 0; i < K; i++) {
         if (lruArray[set][i] >= 0) {
             if (tagArray[set][i] == tag) {
                 n_hit = n_hit + 1;
-                return i;
-            }
-            if ((tagArray[set][i] == tag) && (lruArray[set][i] != -1)) {
-                n_hit = n_hit + 1;
-                return i;
+                result=i;
             }
         }
-        n_miss = n_miss + 1;
-
-    }
-    return -1;
 }
+    return result;
+}
+//updating lru array if not empty, for both hit and miss
     void increLRU(u_int32_t set, u_int32_t K) {
         for (int j = 0; j < K; j++) {
             if ((lruArray[set][j]) != -1);
@@ -100,7 +89,7 @@ u_int32_t hitway(u_int32_t tag,u_int32_t set,u_int32_t K) {
 // TODO  swich index that has highest LRU  with new addrs update tag and set it's LRU =0
     void updateOnMiss(u_int32_t tag, u_int32_t set, u_int32_t K) {//tag, address, K
         int i = 0, max = 0, index = 0;//i for loop, max for max lru, index is o/p line #
-        increLRU(set, K);
+        increLRU(set, K);//update lru first, won't be affected by tag update
         while (i < K) {
             if (lruArray[set][i] == -1) {//if empty
                 tagArray[set][i] = tag;
@@ -181,7 +170,7 @@ u_int32_t hitway(u_int32_t tag,u_int32_t set,u_int32_t K) {
             }
 
         }
-        double missrate = n_miss / (n_miss + n_hit);// miss rate = miss/access
+        double missrate = 1-(n_hit/n_access);// miss rate = miss/access
         printf("miss rate = %f\n", missrate);
 
         //free memory
