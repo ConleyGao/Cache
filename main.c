@@ -181,11 +181,11 @@ int main(int argc, char *argv[]) {
 
 
         //whichSet
-        u_int32_t wSet = whichSet(decimal, C, L, K);
+        u_int32_t wSet = (u_int32_t) whichSet(decimal, C, L, K);
         //tagBits
-        u_int32_t tBits = tagBits(decimal, C, L, K);
+        u_int32_t tBits = (u_int32_t) tagBits(decimal, C, L, K);
         //hit ?
-        u_int32_t hit = hitway(tBits,wSet,K);
+        u_int32_t hit = (u_int32_t) hitway(tBits,wSet,K);
 
         // updates
           if (hit == -1){
