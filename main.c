@@ -114,9 +114,9 @@ int hitway(u_int32_t tag,u_int32_t set,u_int32_t K) {
 
     int main(int argc, char *argv[]) {
         //argv takes [0]main.c [1]K, [2]L,[3]C [4]traceFile
-        u_int32_t K = (u_int32_t) argv[1];//line per set
-        u_int32_t L = (u_int32_t) argv[2];//line size
-        u_int32_t C = (u_int32_t) argv[3] * 1024;//cache size in Byte, KB=1025 bytes
+        u_int32_t K = (u_int32_t) strtol(argv[1],NULL,10);//line per set
+        u_int32_t L = (u_int32_t) strtol(argv[2],NULL,10);//line size
+        u_int32_t C = (u_int32_t) (strtol((argv[3]),NULL,10))*1024;//cache size in Byte, KB=1025 bytes
 
         printf("Trace=%s, K=%d, L=%d, C=%d, ", argv[4], K, L, C);//printing needed stuff
 
