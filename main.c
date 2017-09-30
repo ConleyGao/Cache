@@ -68,14 +68,23 @@ int getLine(u_int32_t C,u_int32_t L,u_int32_t K){
 int hitway(u_int32_t tag,u_int32_t set,u_int32_t K){
 
     for (int i=0;i<K;i++ ){
+<<<<<<< Updated upstream
         if(tagArray[set][i]==tag && lruArray[set][i]!=-1) {
             n_hit=n_hit+1;
             return i;
+=======
+        if(lruArray[set][i]>=0) {
+            if (tagArray[set][i] == tag) {
+                n_hit = n_hit + 1;
+                return i;
+            }
+>>>>>>> Stashed changes
         }
     }
         n_miss = n_miss+1;
     return -1;
 }
+
 void increLRU(u_int32_t set,u_int32_t K){
     for (int j=0;j<K;j++){
        if( (lruArray[set][j])!= -1);
@@ -89,6 +98,18 @@ void updateOnHit(u_int32_t set ,u_int32_t line,u_int32_t K){
 
 }
 
+<<<<<<< Updated upstream
+=======
+/*
+int setaddress(u_int32_t x ,u_int32_t C,u_int32_t L,u_int32_t K){
+    int lineNum = x<<(31-offsetLength(L)-setIndexLength(C,L,K));//get rid of tag
+    lineNum = lineNum >> (31-setIndexLength(C,L,K));//shifting set address to the right
+    int a=0x7fffffff>>(31-setIndexLength(C,L,K));
+    lineNum=lineNum&a;//get rid of 2s complement
+    return lineNum;
+}
+*/
+>>>>>>> Stashed changes
 // TODO  swich index that has highest LRU  with new addrs update tag and set it's LRU =0
     void updateOnMiss(u_int32_t tag, u_int32_t set,u_int32_t K ){//tag, address, K
         int i=0 , max=0, index=0;
