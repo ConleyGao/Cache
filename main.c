@@ -66,9 +66,9 @@ int getLine(u_int32_t C,u_int32_t L,u_int32_t K){
 //TODO   return -1 if no tag match, return which line if hit
 //   if hit return  which line hit
 //   else return -1
-int hitway(u_int32_t tag,u_int32_t set,u_int32_t K) {
+u_int32_t hitway(u_int32_t tag,u_int32_t set,u_int32_t K) {
 
-    for (int i = 0; i < K; i++) {
+    for (u_int32_t i = 0; i < K; i++) {
         if (lruArray[set][i] >= 0) {
             if (tagArray[set][i] == tag) {
                 n_hit = n_hit + 1;
@@ -80,8 +80,9 @@ int hitway(u_int32_t tag,u_int32_t set,u_int32_t K) {
             }
         }
         n_miss = n_miss + 1;
-        return -1;
+
     }
+    return -1;
 }
     void increLRU(u_int32_t set, u_int32_t K) {
         for (int j = 0; j < K; j++) {
@@ -123,12 +124,6 @@ int hitway(u_int32_t tag,u_int32_t set,u_int32_t K) {
         u_int32_t C = (u_int32_t) argv[3] * 1024;//cache size in Byte, KB=1025 bytes
 
         printf("Trace=%s, K=%d, L=%d, C=%d, ", argv[4], K, L, C);//printing needed stuff
-
-        /*  for test
-         int K=4;
-         int L=1;
-         int C=1*1024;
-     */
 
         //vars
         char hexa[max_str_len];
