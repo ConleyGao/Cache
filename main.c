@@ -26,6 +26,10 @@ int nbits (u_int32_t x){//log2()
     return bits;
 }
 
+int setIndexLength(u_int32_t C,u_int32_t L,u_int32_t K){
+    u_int32_t nSet = C/L/K;
+    return nbits (nSet);
+}
 
 int whichSet(u_int32_t x,u_int32_t C,u_int32_t L,u_int32_t K ){
     int offset =setIndexLength(C,L,K);
@@ -44,10 +48,7 @@ int offsetLength(u_int32_t L){
     return nbits(L);
 }
 
-int setIndexLength(u_int32_t C,u_int32_t L,u_int32_t K){
-    u_int32_t nSet = C/L/K;
-    return nbits(nSet);
-}
+
 int tagBits(u_int32_t x ,u_int32_t C,u_int32_t L,u_int32_t K){
     u_int32_t  addr=x;
     addr =addr >> (setIndexLength(C,L,K)+offsetLength(L));
@@ -68,6 +69,11 @@ int getLine(u_int32_t C,u_int32_t L,u_int32_t K){
 int hitway(u_int32_t tag,u_int32_t set,u_int32_t K){
 
     for (int i=0;i<K;i++ ){
+        if(lruArray[set][i]>=0) {
+            if (tagArray[set][i] == tag) {
+                n_hit = n_hit + 1;
+                return i;
+            }
         if((tagArray[set][i]==tag)&&(lruArray[set][i]!=-1)) {
             n_hit=n_hit+1;
             return i;
@@ -76,6 +82,7 @@ int hitway(u_int32_t tag,u_int32_t set,u_int32_t K){
         n_miss = n_miss+1;
     return -1;
 }
+
 void increLRU(u_int32_t set,u_int32_t K){
     for (int j=0;j<K;j++){
        if( (lruArray[set][j])!= -1);
@@ -132,7 +139,7 @@ int main(int argc, char *argv[]) {
     int n_set=C/(L*K);//how many set in cash
 
     tagArray=(unsigned int**)malloc((n_set)*sizeof(unsigned int *));//[set][line]
-    for(int j=0;j<n_set+1;j++){
+    for(j=0;j<n_set+1;j++){
         tagArray[j]=(unsigned int*)malloc(K*sizeof(unsigned int));//each set has K line
     }
 
@@ -144,9 +151,6 @@ int main(int argc, char *argv[]) {
     for (i = 0; i <  n_set; i++)
         for (j = 0; j < K; j++)
             lruArray[i][j] = -1;
-
-
-
 
     //Open file
     FILE *file = fopen(argv[4],"r");//Todd's test

@@ -16,8 +16,6 @@ int tagBits(...)                 Done
    
 hitWay(...)                       Kai Done
 
-getLine(...)                      Kai Done
-
 updateOnHit(...):                 Kai Done
 
 updateOnMiss(...):                //Todd, done, not tested
