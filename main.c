@@ -78,14 +78,14 @@ int hitway(u_int32_t tag,u_int32_t set,u_int32_t K){
 }
 void increLRU(u_int32_t set,u_int32_t K){
     for (int j=0;j<K;j++){
-       if( (lruArray[set][j])!= 0);
+       if( (lruArray[set][j])!= -1);
         lruArray[set][j]++;
 }
 }
 // TODO  only need to update lruarray
 void updateOnHit(u_int32_t set ,u_int32_t line,u_int32_t K){
     increLRU(set,K);
-    lruArray[set][line] = 1;
+    lruArray[set][line] = 0;
 
 }
 
@@ -104,9 +104,9 @@ int setaddress(u_int32_t x ,u_int32_t C,u_int32_t L,u_int32_t K){
         int i=0 , max=0, index=0;
         increLRU(set,K);
         while(i<K){
-            if (lruArray[set][i]==0){
+            if (lruArray[set][i]==-1){
                 tagArray[set][i] =tag;
-                lruArray[set][i] =1;
+                lruArray[set][i] =0;
                 return;
             }
           else if (max<lruArray[set][i] ){
@@ -115,7 +115,7 @@ int setaddress(u_int32_t x ,u_int32_t C,u_int32_t L,u_int32_t K){
            }
         }
         tagArray[set][index] =tag;
-        lruArray[set][index] =1;
+        lruArray[set][index] =0;
     }
 
 
@@ -173,7 +173,10 @@ int main(int argc, char *argv[]) {
     int C=1*1024;
 */
 
-
+    //vars
+    char hexa [max_str_len];
+    u_int32_t decimal ;
+    int i,j;
 
     //cache structure
     int n_set=C/(L*K);//how many set in cash
@@ -184,14 +187,15 @@ int main(int argc, char *argv[]) {
     }
 
     lruArray=(int**)malloc((n_set)*sizeof(int *));//[set][line]
-    for(int j=0;j<n_set+1;j++){
+    for( j=0;j<n_set+1;j++){
         lruArray[j]=(int*)malloc(K*sizeof(int));//each set has K line
     }
+    //initialize lruArray to -1
+    for (i = 0; i <  n_set; i++)
+        for (j = 0; j < K; j++)
+            lruArray[i][j] = -1;
 
 
-    //trace
-    char hexa [max_str_len];
-    u_int32_t decimal ;
 
 
     //Open file
