@@ -91,9 +91,9 @@ u_int32_t hitway(u_int32_t tag,u_int32_t set,u_int32_t K) {
         }
     }
 // TODO  only need to update lruarray
-    void updateOnHit(u_int32_t set, u_int32_t line, u_int32_t K) {
-        increLRU(set, K);
-        lruArray[set][line] = 0;
+    void updateOnHit(u_int32_t set, u_int32_t line, u_int32_t K) {//if it's a hit, update the LRU value
+        increLRU(set, K);//all LRU value add one
+        lruArray[set][line] = 0;// set the LRUvalue of the hit line to 0
 
     }
 
