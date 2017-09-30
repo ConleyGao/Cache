@@ -8,12 +8,13 @@
 
 //define vars
 //Max File Size
-#define max_str_len             1000
+#define max_str_len             255
 int **tagArray;
 int **lruArray;
 //int manySet;//how many set
 //int manyLine;//how many line
-//int missCount=0;//miscount
+int n_hit = 0;
+int n_miss = 0;
 
 int nbits (u_int32_t x){//log2()
     int n = x-1;
@@ -64,32 +65,28 @@ int getLine(u_int32_t C,u_int32_t L,u_int32_t K){
 //TODO   return -1 if no tag match, return which line if hit
 //   if hit return  which line hit
 //   else return -1
-int hitway(u_int32_t x ,u_int32_t C,u_int32_t L,u_int32_t K){
+int hitway(u_int32_t tag,u_int32_t set,u_int32_t K){
 
-    int hit = -1;
-    int tag = tagBits(x,C,L,K);
-    int line = getLine(C,L,K);
-    if(tag == tagArray[whichSet(x,C,L,K)][line]){
-        hit = line;
-    }
-    return hit;
-}
-
-// TODO  only need to update lruarray
-void updateOnHit(u_int32_t x ,u_int32_t C,u_int32_t L,u_int32_t K){
-    int s = whichSet(x,C,L,K);
-    int l = getLine(C,L,K);
-    lruArray[s][l]= 0;//reset the lru value
-    for(int set = 0; set<C*1000/(L*K)-1; set++){//others in the cache lru value ++
-        for(int line = 0;line< K; line ++){
-            if(set!=s&&line!=l){
-                lruArray[set][line]++;
-            }
+    for (int i=0;i<K;i++ ){
+        if(tagArray[set][i]==tag) {
+            n_hit=n_hit+1;
+            return i;
         }
     }
+        n_miss = n_miss+1;
+    return -1;
+}
+void increLRU(u_int32_t set,u_int32_t K){
+    for (int j=0;j<K;j++){
+       if( (lruArray[set][j])!= 0);
+        lruArray[set][j]++;
+}
+}
+// TODO  only need to update lruarray
+void updateOnHit(u_int32_t set ,u_int32_t line,u_int32_t K){
+    increLRU(set,K);
+    lruArray[set][line] = 1;
 
-    //counting
-    missCount++;
 }
 
 
@@ -103,19 +100,24 @@ int setaddress(u_int32_t x ,u_int32_t C,u_int32_t L,u_int32_t K){
 }
 */
 // TODO  swich index that has highest LRU  with new addrs update tag and set it's LRU =0
-    void updateOnMiss(u_int32_t tag, u_int32_t x, u_int32_t C,u_int32_t L,u_int32_t K ){//tag, address, C, L, K
-        missCount++;//counting
-        int setNum = whichSet(x,C,L,K);//waiting for whichset()
-        //get set address
-        //int line=setaddress(x,C,L,K)-L*setNum+1;//getting which line, L start with 1
-        int line =  MissTag(setNum, tag, K);//updatedata
-        MissLru(setNum,line, manySet,manyLine);//updatedata
-
-        //debug
-        printf("address %d, tag %d, in array %d line:%d\n", x, tag, setNum,line);
-        printf("[0][0]: %d\n", lruArray[0][0]);
-
+    void updateOnMiss(u_int32_t tag, u_int32_t set,u_int32_t K ){//tag, address, C, L, K
+        int i=0 , max=0, index=0;
+        increLRU(set,K);
+        while(i<K){
+            if (lruArray[set][i]==0){
+                tagArray[set][i] =tag;
+                lruArray[set][i] =1;
+                return;
+            }
+          else if (max<lruArray[set][i] ){
+               max = lruArray[set][i];
+               index = i;
+           }
+        }
+        tagArray[set][index] =tag;
+        lruArray[set][index] =1;
     }
+
 
     void MissLru(int set, int line, int manySet, int manyLine){
         for(int j=0; j<manySet; j++){//set# sweep
@@ -134,6 +136,8 @@ int setaddress(u_int32_t x ,u_int32_t C,u_int32_t L,u_int32_t K){
         int lru=0;//lru comparing
         int a=0;//storing biggest lru of j
         int check=0;
+
+
         for(int j=0;j<K;j++){
             temp=tagArray[set][j];
             if(!temp){//if empty
@@ -172,17 +176,16 @@ int main(int argc, char *argv[]) {
 
 
     //cache structure
-    int n_set=C/(L*K)-1;//how many set in cash
-    //manySet=set;   no need
-    //manyLine=K;    no need
-    tagArray=(int**)malloc((n_set+1)*max_str_len);//[set][line]
+    int n_set=C/(L*K);//how many set in cash
+
+    tagArray=(int**)malloc((n_set)*sizeof(int *));//[set][line]
     for(int j=0;j<n_set+1;j++){
-        *(tagArray+j)=(int*)malloc(K*sizeof(int));//each set has K line
+        tagArray[j]=(int*)malloc(K*sizeof(int));//each set has K line
     }
 
-    lruArray=(int**)malloc((n_set+1)*max_str_len);//[set][line]
+    lruArray=(int**)malloc((n_set)*sizeof(int *));//[set][line]
     for(int j=0;j<n_set+1;j++){
-        *(lruArray+j)=(int*)malloc(K*sizeof(int));//each set has K line
+        lruArray[j]=(int*)malloc(K*sizeof(int));//each set has K line
     }
 
 
@@ -199,8 +202,7 @@ int main(int argc, char *argv[]) {
         exit(0);
     }
 
-        int n_hit = 0;
-        int n_miss = 0;
+
     //scan traces and access cache
     while(fscanf(file,"%s",&hexa[0])!=EOF) {
 
@@ -211,24 +213,20 @@ int main(int argc, char *argv[]) {
         printf("decimal : %u\n", decimal);
 
 
-        //offset bits
-        int offset = offsetLength(L);
-        //indexLength
-        int iLength = setIndexLength(C, L, K);
         //whichSet
         int wSet = whichSet(decimal, C, L, K);
         //tagBits
         int tBits = tagBits(decimal, C, L, K);
 
         //hit ?
-        int hit = hitway();
+        int hit = hitway(tBits,wSet,K);
 
         // updates
           if (hit == -1){
-            updateOnMiss(decimal,wSet,tBits,LRU);
+            updateOnMiss(tBits,wSet,K);
         }
-          else(){
-            updateOnHit(hit,LRU )
+          else{
+            updateOnHit(wSet,hit,K );
         }
 
         //TODO calculate miss rate
