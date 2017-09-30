@@ -63,7 +63,7 @@ u_int32_t hitway(u_int32_t tag,u_int32_t set,u_int32_t K) {
     n_access++;//counting access time _
     u_int32_t result=(u_int32_t )-1;//return value
     for (u_int32_t i = 0; i < K; i++) {
-        if (lruArray[set][i] >= 0) {//If LRU value is -1, the block is empty, no need to compare
+        if (lruArray[set][i] >= 0) {//If LRU value is -1, then the block is empty, no need to compare
             if (tagArray[set][i] == tag) {
                 n_hit = n_hit + 1;//update hit value to calculate hit rate
                 result=i;
@@ -82,7 +82,7 @@ u_int32_t hitway(u_int32_t tag,u_int32_t set,u_int32_t K) {
 // TODO  only need to update lruarray
     void updateOnHit(u_int32_t set, u_int32_t line, u_int32_t K) {//if it's a hit, update the LRU value
         increLRU(set, K);//all LRU value add one
-        lruArray[set][line] = 0;// set the LRUvalue of the hit line to 0
+        lruArray[set][line] = 0;// set the LRU value of the hit line to 0
 
     }
 
