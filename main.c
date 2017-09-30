@@ -65,8 +65,9 @@ int tagBits(u_int32_t x ,u_int32_t C,u_int32_t L,u_int32_t K){
 //   else return -1
 
 int hitway(u_int32_t tag,u_int32_t set,u_int32_t K) {
+    int i =0;
 
-    for (int i = 0; i < K; i++) {
+    for (i = 0; i < K; i++) {
             if ((tagArray[set][i] == tag) && (lruArray[set][i] >=0)) { // if tags are equal and not invalid
                 n_hit = n_hit + 1;  //increment hit
                 return i;          //return hit line
@@ -78,7 +79,8 @@ int hitway(u_int32_t tag,u_int32_t set,u_int32_t K) {
 
 //increment all line in current set except invalid line
     void increLRU(u_int32_t set, u_int32_t K) {
-        for (int j = 0; j < K; j++) {
+    int j =0;
+        for ( j = 0; j < K; j++) {
             if ((lruArray[set][j]) != -1);
             lruArray[set][j]++;
         }
