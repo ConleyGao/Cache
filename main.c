@@ -68,17 +68,11 @@ int getLine(u_int32_t C,u_int32_t L,u_int32_t K){
 int hitway(u_int32_t tag,u_int32_t set,u_int32_t K){
 
     for (int i=0;i<K;i++ ){
-<<<<<<< Updated upstream
-        if(tagArray[set][i]==tag && lruArray[set][i]!=-1) {
-            n_hit=n_hit+1;
-            return i;
-=======
         if(lruArray[set][i]>=0) {
             if (tagArray[set][i] == tag) {
                 n_hit = n_hit + 1;
                 return i;
             }
->>>>>>> Stashed changes
         }
     }
         n_miss = n_miss+1;
@@ -98,8 +92,8 @@ void updateOnHit(u_int32_t set ,u_int32_t line,u_int32_t K){
 
 }
 
-<<<<<<< Updated upstream
-=======
+
+
 /*
 int setaddress(u_int32_t x ,u_int32_t C,u_int32_t L,u_int32_t K){
     int lineNum = x<<(31-offsetLength(L)-setIndexLength(C,L,K));//get rid of tag
