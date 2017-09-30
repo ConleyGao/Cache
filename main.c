@@ -16,47 +16,43 @@ int **lruArray;
 int n_hit = 0;//hit count
 int n_miss = 0;//miss count
 
-
-//find # of bits needed to show index number
-int nbits (u_int32_t x){
-    int n = x-1;         // index start 0  os -1
-    int bits=0;          // initiate # 0f bits =0
+int nbits (u_int32_t x){//log2()
+    int n = x-1;
+    int bits=0;
     while(n>0){
-        n=n>>1;           // n/2    logical shift
+        n=n>>1;
         bits+=1;
     }
     return bits;
 }
 
 int setIndexLength(u_int32_t C,u_int32_t L,u_int32_t K){
-    u_int32_t nSet = C/L/K;    //  #sets  = cashe size / line size / ways
+    u_int32_t nSet = C/L/K;
     return nbits (nSet);
 }
 
-int offsetLength(u_int32_t L){
-    return nbits(L);          //offset bits needed for Lbytes line
-}
-
 int whichSet(u_int32_t x,u_int32_t C,u_int32_t L,u_int32_t K ){
-    int offset =offsetLength(L);    //offset bits
-    int IndexLength = setIndexLength(C,L,K); //index bits
-    u_int32_t  addr=x>>offset;  // remove offset bits  logical shift
-    int mask =0;    //initialize mask
+    int offset =setIndexLength(C,L,K);
+    u_int32_t  addr=x>>offset;
+    int mask =0;
     int i = 0;
-    while(i<IndexLength){   //mask (1111...) bits = #set bits
+    while(i<offset){
         mask =mask<<1 | 1;
         i++;
     }
-    return  addr & mask;    //filter out the bits for index
+    printf("%x\n",mask);
+    return  addr & mask;
 }
 
-
+int offsetLength(u_int32_t L){
+    return nbits(L);
+}
 
 
 int tagBits(u_int32_t x ,u_int32_t C,u_int32_t L,u_int32_t K){
     u_int32_t  addr=x;
-    addr =addr >> (setIndexLength(C,L,K)+offsetLength(L));  //tag = address logical shift right (set bits+offset bits)
-    return addr;  // return tag as unsigned integer for easy comparsion
+    addr =addr >> (setIndexLength(C,L,K)+offsetLength(L));
+    return addr;
 }
 
 // TODO  this should not be need , same as hitway()
@@ -73,14 +69,20 @@ int getLine(u_int32_t C,u_int32_t L,u_int32_t K){
 int hitway(u_int32_t tag,u_int32_t set,u_int32_t K) {
 
     for (int i = 0; i < K; i++) {
-            if ((tagArray[set][i] == tag) && (lruArray[set][i] != -1)) { // if tags are equal and not invalid
-                n_hit = n_hit + 1;  //increment hit
-                return i;          //return hit line
+        if (lruArray[set][i] >= 0) {
+            if (tagArray[set][i] == tag) {
+                n_hit = n_hit + 1;
+                return i;
+            }
+            if ((tagArray[set][i] == tag) && (lruArray[set][i] != -1)) {
+                n_hit = n_hit + 1;
+                return i;
             }
         }
+        n_miss = n_miss + 1;
         return -1;
     }
-//increment all line in current set except invalid line
+}
     void increLRU(u_int32_t set, u_int32_t K) {
         for (int j = 0; j < K; j++) {
             if ((lruArray[set][j]) != -1);
@@ -89,22 +91,21 @@ int hitway(u_int32_t tag,u_int32_t set,u_int32_t K) {
     }
 // TODO  only need to update lruarray
     void updateOnHit(u_int32_t set, u_int32_t line, u_int32_t K) {
-        increLRU(set, K);//increase lru for all existing address
-        lruArray[set][line] = 0;//update lru
+        increLRU(set, K);
+        lruArray[set][line] = 0;
 
     }
 
 // TODO  swich index that has highest LRU  with new addrs update tag and set it's LRU =0
     void updateOnMiss(u_int32_t tag, u_int32_t set, u_int32_t K) {//tag, address, K
         int i = 0, max = 0, index = 0;//i for loop, max for max lru, index is o/p line #
-        increLRU(set, K);//increase lru for all existing address
+        increLRU(set, K);
         while (i < K) {
-            if (lruArray[set][i] == -1) {//if empty line
-                tagArray[set][i] = tag;   // update tag on current line
-                lruArray[set][i] = 0;    //set lru to 0
-                return;                  //exit function
-            }
-            else if (max < lruArray[set][i]) {//find max lru line
+            if (lruArray[set][i] == -1) {//if empty
+                tagArray[set][i] = tag;
+                lruArray[set][i] = 0;
+                return;
+            } else if (max < lruArray[set][i]) {//find max lru
                 max = lruArray[set][i];
                 index = i;
             }
