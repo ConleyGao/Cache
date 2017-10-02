@@ -4,7 +4,9 @@
 #include <string.h>
 
 
-
+//KAI QIAN
+//CONLEY HAO GAO
+//GONGTAO YANG
 
 //define vars
 //Max File Size
