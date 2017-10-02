@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <assert.h>
 #include <string.h>
 
 
@@ -19,6 +19,7 @@ double n_access = 0;//access count
 
 //find # of bits needed to show index number
 int nbits (u_int32_t x){
+
     int n = x-1;         // index start 0  os -1
     int bits=0;          // initiate # 0f bits =0
     while(n>0){
@@ -32,7 +33,14 @@ int setIndexLength(u_int32_t C,u_int32_t L,u_int32_t K){
     u_int32_t nSet = C/L/K;    //  #sets  = cashe size / line size / ways
     return nbits (nSet);
 }
+int isPower2(int x) {          //use to check inputs
+    // x=0 or x is negative  return 0
+    // for x is power of 2 x&2'sx +2'sx  =0
+    int one = (x&(~x+1))+(~x+1); //if x is power of 2 (0)
+    int sign =(x>>31)&1;    // if -  (1)
 
+    return (!(one|sign))&!!x;
+}
 int offsetLength(u_int32_t L){
     return nbits(L);          //offset bits needed for Lbytes line
 }
@@ -47,11 +55,9 @@ int whichSet(u_int32_t x,u_int32_t C,u_int32_t L,u_int32_t K ){
         mask =mask<<1 | 1;
         i++;
     }
+    assert(nbits(addr&mask)<=IndexLength);
     return  addr & mask;    //filter out the bits for index
 }
-
-
-
 
 int tagBits(u_int32_t x ,u_int32_t C,u_int32_t L,u_int32_t K){
     u_int32_t  addr=x;
@@ -119,6 +125,8 @@ int hitway(u_int32_t tag,u_int32_t set,u_int32_t K) {
         u_int32_t L = (u_int32_t) strtol(argv[2],NULL,10);//line size
         u_int32_t C = (u_int32_t) (strtol((argv[3]),NULL,10))*1024;//cache size in Byte, KB=1025 bytes
 
+        assert(C/L/K>0| isPower2(C*K*L));
+
         printf("Trace=%s, K=%d, L=%d, C=%d, ", argv[4], K, L, C);//printing needed stuff
 
         //vars
@@ -168,6 +176,7 @@ int hitway(u_int32_t tag,u_int32_t set,u_int32_t K) {
             u_int32_t tBits = (u_int32_t) tagBits(decimal, C, L, K);
             //hit ?
             u_int32_t hit = (u_int32_t) hitway(tBits, wSet, K);
+            assert(hit<= K || hit==-1);
 
             // updates
             if (hit == -1) {
@@ -178,6 +187,8 @@ int hitway(u_int32_t tag,u_int32_t set,u_int32_t K) {
 
         }
         double missrate = 1-(n_hit/n_access);// miss rate = miss/access
+        assert(n_hit<n_access);
+
         printf("miss rate = %f\n", missrate);
 
         //free memory
